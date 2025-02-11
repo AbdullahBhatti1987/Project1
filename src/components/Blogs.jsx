@@ -5,7 +5,7 @@ import Blog from "./Blog";
 
 function Blogs() {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [ItemWidth, setItemWidth] = useState(250);
+  const [ItemWidth, setItemWidth] = useState(500);
 
   const maxLength = (data.blogs.length - 1) * ItemWidth;
   const minLength = 0;
