@@ -1,37 +1,67 @@
-import React, { useEffect, useRef, useState, useTransition } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import data from "../content/data";
 import RoundButton from "./RoundButton";
 import Blog from "./Blog";
 
 function Blogs() {
-  const [number, setNumber] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [ItemWidth, setItemWidth] = useState(250);
 
-  const maxLength = data.blogs.length;
+  const maxLength = (data.blogs.length - 1) * ItemWidth;
+  const minLength = 0;
 
+  const containerRef = useRef();
 
-  const hanldePrevious = () => {
-
-        setNumber(number < 1 ? data.blogs.length - 1 : number - 1);
+  let newScrollPosition = 0;
+  const handleScroll = (scrollAmount) => {
+    if (containerRef.current) {
+      newScrollPosition = scrollPosition + scrollAmount;
+      const boundedScrollPosition = newScrollPosition;
+      setScrollPosition(boundedScrollPosition);
+      containerRef.current.scrollTo({
+        left: boundedScrollPosition,
+        behavior: "smooth",
+      });
+    }
   };
-  const hanldeNext = () => {
-    setNumber(number >= data.blogs.length - 1 ? 1 : number + 1);
-  };
-
-
-  useEffect(() => {
-    setInterval(() => {
-      hanldeNext();
-    }, 5000);
-  }, []);
 
   return (
-    <div className="w-full mx-auto flex flex-col gap-6 py-6">
-      <h1 className="lg:text-4xl">Blogs</h1>
-
-      <div className="flex gap-4 justify-center items-center overflow-hidden">
-        <RoundButton text={"P"} className={"absolute ml-4 left-0"} onClick={hanldePrevious} />
-        <Blog  className={"translate-transform duration-1000 ease-in-out"} title={data.blogs[number].title} message={data.blogs[number].message} image={data.blogs[number].image}/>
-        <RoundButton text={"N"} className={"absolute mr-4 right-0"} onClick={hanldeNext} />
+    <div className="w-full mx-auto flex flex-col gap-6 ">
+      <h1 className="lg:text-4xl">{data.slider.heading}</h1>
+      <div className="w-full flex flex-nowrap items-center">
+        <RoundButton
+          text={"<"}
+          className={"absolute ml-4 left-0 md:visible invisible"}
+          onClick={() => {
+            handleScroll(-ItemWidth);
+          }}
+          disabled={scrollPosition == minLength}
+        />
+        <div
+          className="w-full h-full transition-all duration-200 ease-in-out scroll-smooth md:overflow-x-hidden overflow-x-scroll"
+          ref={containerRef}
+        >
+          <div className="w-fit flex flex-nowrap gap-4">
+            {data.blogs.map((item, index) => (
+              <Blog
+                key={index}
+                title={item.title}
+                message={item.message}
+                image={item.image}
+                className={"xl:w-[680px] lg:w-[470px] md:w-[340px] w-[370px]"}
+                // className={"w-[500px]"}
+              />
+            ))}
+          </div>
+        </div>
+        <RoundButton
+          text={">"}
+          className={"absolute mr-4 right-0 md:visible invisible"}
+          onClick={() => {
+            handleScroll(ItemWidth);
+          }}
+          disabled={scrollPosition == maxLength}
+        />
       </div>
     </div>
   );
