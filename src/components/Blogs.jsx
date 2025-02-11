@@ -7,7 +7,7 @@ function Blogs() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [ItemWidth, setItemWidth] = useState(500);
 
-  const maxLength = (data.blogs.length - 1) * ItemWidth;
+  const maxLength = (data.blogs.data.length - 2) * ItemWidth;
   const minLength = 0;
 
   const containerRef = useRef();
@@ -17,6 +17,7 @@ function Blogs() {
     if (containerRef.current) {
       newScrollPosition = scrollPosition + scrollAmount;
       const boundedScrollPosition = newScrollPosition;
+      console.log("boundedScrollPosition=>", boundedScrollPosition)
       setScrollPosition(boundedScrollPosition);
       containerRef.current.scrollTo({
         left: boundedScrollPosition,
@@ -27,7 +28,7 @@ function Blogs() {
 
   return (
     <div className="w-full mx-auto flex flex-col gap-6 ">
-      <h1 className="lg:text-4xl">{data.slider.heading}</h1>
+      <h1 className="lg:text-4xl">{data.blogs.heading}</h1>
       <div className="w-full flex flex-nowrap items-center">
         <RoundButton
           text={"<"}
@@ -41,8 +42,8 @@ function Blogs() {
           className="w-full h-full transition-all duration-200 ease-in-out scroll-smooth md:overflow-x-hidden overflow-x-scroll"
           ref={containerRef}
         >
-          <div className="w-fit flex flex-nowrap gap-4">
-            {data.blogs.map((item, index) => (
+          <div className="w-fit flex flex-nowrap gap-6">
+            {data.blogs.data.map((item, index) => (
               <Blog
                 key={index}
                 title={item.title}

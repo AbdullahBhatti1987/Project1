@@ -7,13 +7,14 @@ function Slider() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [ItemWidth, setItemWidth] = useState(250);
 
-  const maxLength = (data.slider.data.length - 2) * ItemWidth;
+  const maxLength = (data.slider.data.length - 4) * ItemWidth;
   const minLength = 0;
 
   const containerRef = useRef();
 
   let newScrollPosition = 0;
   const handleScroll = (scrollAmount) => {
+
     if (containerRef.current) {
       newScrollPosition = scrollPosition + scrollAmount;
       const boundedScrollPosition = newScrollPosition;
@@ -26,7 +27,7 @@ function Slider() {
   };
 
   return (
-    <div className="w-full mx-auto flex flex-col gap-6 ">
+    <div className="w-full mx-auto flex flex-col gap-6">
       <h1 className="lg:text-4xl">{data.slider.heading}</h1>
       <div className="w-full flex flex-nowrap items-center">
         <RoundButton
@@ -48,10 +49,11 @@ function Slider() {
                 image={item.image}
                 name={item.name}
                 category={item.category}
+                oldPrice={item.oldPrice}
                 price={item.price}
                 screen={ItemWidth}
                 onClick={() => console.log(item.slug)}
-                className={"transition-all ease-in-out duration-100"}
+                className={" lg:w-[250px] md:w-[150px] w-[100px] transition-all ease-in-out duration-100"}
               />
             ))}
           </div>
