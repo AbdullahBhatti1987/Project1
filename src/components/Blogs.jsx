@@ -49,7 +49,6 @@ function Blogs() {
                 message={item.message}
                 image={item.image}
                 className={"xl:w-[680px] lg:w-[470px] md:w-[340px] w-[370px]"}
-                // className={"w-[500px]"}
               />
             ))}
           </div>
